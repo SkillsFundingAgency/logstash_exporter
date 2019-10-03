@@ -61,16 +61,10 @@ type Pipeline struct {
 		Failures             int         `json:"failures"`
 	} `json:"reloads"`
 	Queue struct {
-		Events              int    `json:"events"`
+		Events              int    `json:"events_count"`
 		Type                string `json:"type"`
 		QueueSizeInBytes    int    `json:"queue_size_in_bytes"`
 		MaxQueueSizeInBytes int64  `json:"max_queue_size_in_bytes"`
-		Capacity            struct {
-			QueueSizeInBytes    int   `json:"queue_size_in_bytes"`
-			PageCapacityInBytes int   `json:"page_capacity_in_bytes"`
-			MaxQueueSizeInBytes int64 `json:"max_queue_size_in_bytes"`
-			MaxUnreadEvents     int   `json:"max_unread_events"`
-		} `json:"capacity"`
 		Data struct {
 			Path             string `json:"path"`
 			FreeSpaceInBytes int64  `json:"free_space_in_bytes"`
