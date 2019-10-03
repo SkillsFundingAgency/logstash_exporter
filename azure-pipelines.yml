@@ -6,8 +6,7 @@ resources:
 
 variables:
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: '{{ containerRegistryConnection.Id }}'
-  containerRegistry: '{{ containerRegistryConnection.Authorization.Parameters.loginServer }}'
+  dockerRegistryServiceConnection: 'Docker Hub'
   imageRepository: chelnak/logstash_exporter
   dockerfilePath: '**/Dockerfile'
   
