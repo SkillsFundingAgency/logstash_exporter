@@ -795,12 +795,12 @@ func (c *NodeStatsCollector) collectPipelines(pipelines map[string]Pipeline, ch 
 				pipelineID,
 			)
 
-			ch <- prometheus.MustNewConstMetric(
-				c.PipelineQueuePageCapacity,
-				prometheus.CounterValue,
-				float64(pipeline.Queue.Capacity.PageCapacityInBytes),
-				pipelineID,
-			)
+			// ch <- prometheus.MustNewConstMetric(
+			// 	c.PipelineQueuePageCapacity,
+			// 	prometheus.CounterValue,
+			// 	float64(pipeline.Queue.Capacity.PageCapacityInBytes),
+			// 	pipelineID,
+			// )
 
 			ch <- prometheus.MustNewConstMetric(
 				c.PipelineQueueMaxQueueSize,
@@ -809,12 +809,12 @@ func (c *NodeStatsCollector) collectPipelines(pipelines map[string]Pipeline, ch 
 				pipelineID,
 			)
 
-			ch <- prometheus.MustNewConstMetric(
-				c.PipelineQueueMaxUnreadEvents,
-				prometheus.CounterValue,
-				float64(pipeline.Queue.Capacity.MaxUnreadEvents),
-				pipelineID,
-			)
+			// ch <- prometheus.MustNewConstMetric(
+			// 	c.PipelineQueueMaxUnreadEvents,
+			// 	prometheus.CounterValue,
+			// 	float64(pipeline.Queue.Capacity.MaxUnreadEvents),
+			// 	pipelineID,
+			// )
 
 			ch <- prometheus.MustNewConstMetric(
 				c.PipelineQueueSizeInBytes,
