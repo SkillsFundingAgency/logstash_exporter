@@ -1,8 +1,8 @@
 go:
     cgo: false
-    version: 1.11
+    version: 1.13.1
 repository:
-    path: github.com/sequra/logstash_exporter
+    path: github.com/chelnak/logstash_exporter
 build:
     binaries:
         - name: logstash_exporter
@@ -20,13 +20,3 @@ tarball:
 crossbuild:
     platforms:
         - linux/amd64
-        - linux/386
-        - linux/arm
-        - linux/arm64
-        - linux/mips
-        - linux/mipsle
-        - linux/mips64
-        - linux/mips64le
-        - linux/ppc64
-        - linux/ppc64le
-        - linux/s390x
