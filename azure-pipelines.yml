@@ -27,6 +27,9 @@ stages:
       inputs:
         configFilePath: GitVersion.yml
 
+    - bash: echo $BUILD_BUILDNUMBER >> VERSION
+      displayName: "Set build number"
+
     - task: Docker@2
       inputs:
         command: 'build'
