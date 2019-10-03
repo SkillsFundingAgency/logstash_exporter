@@ -27,16 +27,18 @@ stages:
       inputs:
         configFilePath: GitVersion.yml
 
-    - bash: echo $BUILD_BUILDNUMBER >> VERSION
+    - bash: echo $BUILD_BUILDNUMBER > VERSION
       displayName: "Set build number"
 
     - task: Docker@2
+      displayName: "Docker build"
       inputs:
         command: 'build'
         Dockerfile: $(dockerFilePath)
         tags: '$(Build.BuildNumber)'
 
     - task: Docker@2
+      displayName: "Push tagged image $(Build.BuildNumber)"
       inputs:
         containerRegistry: $(dockerRegistryServiceConnection)
         repository: $(imageRepository)
