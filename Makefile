@@ -6,6 +6,10 @@ include Makefile.common
 
 TARGET ?= logstash_exporter
 
+vendor:
+	@echo ">> installing dependencies on vendor"
+	GO111MODULE=$(GO111MODULE) $(GO) mod vendor
+	
 test:
 	@echo ">> running tests"
 	GO111MODULE=$(GO111MODULE) $(GO) test -short $(pkgs)
