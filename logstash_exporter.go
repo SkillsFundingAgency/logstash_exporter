@@ -2,7 +2,6 @@ package main
 
 import (
 	"net/http"
-	_ "net/http/pprof"
 	"sync"
 	"time"
 
@@ -10,8 +9,9 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/prometheus/common/log"
 	"github.com/prometheus/common/version"
-	"github.com/sequra/logstash_exporter/collector"
 	"gopkg.in/alecthomas/kingpin.v2"
+
+	"github.com/chelnak/logstash_exporter/collector"
 )
 
 var (
