@@ -1,4 +1,5 @@
-# Logstash exporter [![Build Status](https://travis-ci.org/sequra/logstash_exporter.svg)]
+# Logstash exporter [[![Build Status](https://craigg.visualstudio.com/Pipelines/_apis/build/status/logstash_exporter?branchName=master)](https://craigg.visualstudio.com/Pipelines/_build/latest?definitionId=20&branchName=master)]
+
 Prometheus exporter for the metrics available in Logstash since version 5.0.
 
 Continuous integration: [travis](https://travis-ci.org/sequra/logstash_exporter/)

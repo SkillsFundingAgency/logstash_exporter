@@ -4,6 +4,12 @@ trigger:
     include:
       - "*"
 
+  paths:
+    include:
+    - "*"
+    exclude:
+    - README.md
+
 pr: none
 
 variables:
