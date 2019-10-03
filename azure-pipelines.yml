@@ -1,15 +1,15 @@
 trigger:
-- master
+  batch: true
+  branches:
+    include:
+      - "*"
 
-resources:
-- repo: self
+pr: none
 
 variables:
-  # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: 'Docker Hub'
   imageRepository: chelnak/logstash_exporter
   dockerfilePath: '**/Dockerfile'
-  
   vmImageName: 'ubuntu-latest'
 
 stages:
