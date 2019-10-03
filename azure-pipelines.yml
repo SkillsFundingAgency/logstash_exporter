@@ -27,11 +27,14 @@ stages:
       inputs:
         configFilePath: GitVersion.yml
 
+    - bash: echo "##vso[build.updatebuildnumber]${BUILD_BUILDNUMBER}-prerelease"
+      condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
+      displayName: 'Set non master build number'
+
     - bash: echo $BUILD_BUILDNUMBER > VERSION
       displayName: "Set build number"
 
     - task: Docker@2
-      displayName: "Docker build"
       inputs:
         repository: $(imageRepository)
         command: 'build'
@@ -46,16 +49,6 @@ stages:
         command: 'push'
         Dockerfile: '$(dockerFilePath)'
         tags: '$(Build.BuildNumber)'
-
-    - task: Docker@2
-      displayName: Push tagged image [latest] if master
-      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-      inputs:
-        containerRegistry: $(dockerRegistryServiceConnection)
-        repository: $(imageRepository)
-        command: 'push'
-        Dockerfile: '$(dockerFilePath)'
-        tags: 'latest'
 
     - task: GitHubRelease@0
       displayName: Create a GitHub GitHubRelease
