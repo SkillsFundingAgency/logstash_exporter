@@ -1,5 +1,5 @@
 # See: https://hub.docker.com/_/golang/
-FROM golang:latest as golang
+FROM golang:1.13.1 as golang
 
 ADD . $GOPATH/logstash_exporter/
 
