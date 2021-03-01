@@ -1,7 +1,7 @@
 parameters:
-  ImageRepository
-  DockerFilePath
-  DockerRegistryServiceConnection
+  ImageRepository:
+  DockerFilePath:
+  DockerRegistryServiceConnection:
 
 jobs:
 - job: Build
