@@ -12,6 +12,7 @@ jobs:
     displayName: GitVersion
     inputs:
       configFilePath: GitVersion.yml
+      updateAssemblyInfo: true
 
   - bash: echo "##vso[build.updatebuildnumber]${BUILD_BUILDNUMBER}-prerelease"
     condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
