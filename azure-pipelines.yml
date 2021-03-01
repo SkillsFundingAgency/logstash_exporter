@@ -12,57 +12,19 @@ trigger:
 
 pr: none
 
+pool:
+  vmImage: 'ubuntu-latest'
+
 variables:
-  dockerRegistryServiceConnection: 'Docker Hub'
-  imageRepository: chelnak/logstash_exporter
-  dockerfilePath: '**/Dockerfile'
-  vmImageName: 'ubuntu-latest'
+  DockerRegistryServiceConnection: 'Apprenticeships DevOps Docker Hub'
+  ImageRepository: apprenticeshipsdevops/das-logstash-exporter
+  DockerfilePath: '**/Dockerfile'
 
 stages:
 - stage: Build
-  displayName: Build and push stage
-  jobs:  
-  - job: Build
-    displayName: Build
-    pool:
-      vmImage: $(vmImageName)
-    steps:
-
-    - task: gittools.gitversion.gitversion-task.GitVersion@5
-      displayName: GitVersion
-      inputs:
-        configFilePath: GitVersion.yml
-
-    - bash: echo "##vso[build.updatebuildnumber]${BUILD_BUILDNUMBER}-prerelease"
-      condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
-      displayName: 'Set non master build number'
-
-    - bash: echo $BUILD_BUILDNUMBER > VERSION
-      displayName: "Set build number"
-
-    - task: Docker@2
-      inputs:
-        repository: $(imageRepository)
-        command: 'build'
-        Dockerfile: $(dockerFilePath)
-        tags: '$(Build.BuildNumber)'
-
-    - task: Docker@2
-      displayName: "Push tagged image [Build.BuildNumber]"
-      inputs:
-        containerRegistry: $(dockerRegistryServiceConnection)
-        repository: $(imageRepository)
-        command: 'push'
-        Dockerfile: '$(dockerFilePath)'
-        tags: '$(Build.BuildNumber)'
-
-    - task: GitHubRelease@0
-      displayName: Create a GitHub GitHubRelease
-      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-      inputs:
-        gitHubConnection: 'chelnak'
-        repositoryName: 'chelnak/logstash_exporter'
-        action: 'create'
-        target: '$(Build.SourceVersion)'
-        tagSource: 'manual'
-        tag: '$(Build.BuildNumber)'
+  jobs:
+  - template: /pipeline-templates/job/code-build.yml
+    parameters:
+      ImageRepository: $(ImageRepository)
+      DockerFilePath: $(DockerfilePath)
+      DockerRegistryServiceConnection: $(DockerRegistryServiceConnection)
