@@ -13,7 +13,10 @@ trigger:
 pr: none
 
 pool:
-  vmImage: 'ubuntu-latest'
+  name: "DAS - Continuous Integration"
+  demands:
+  - Agent.OS -equals Linux
+  - docker
 
 variables:
   DockerRegistryServiceConnection: 'Apprenticeships DevOps Docker Hub'
