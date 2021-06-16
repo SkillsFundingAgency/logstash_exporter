@@ -2,7 +2,7 @@ parameters:
   ServiceConnection:
 
 jobs:
-- job: Build Image
+- job: Build_Image
   displayName: Build Image
   steps:
     - task: gittools.gitversion.gitversion-task.GitVersion@5
