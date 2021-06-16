@@ -15,19 +15,14 @@ pr: none
 pool:
   name: "DAS - Continuous Integration"
   demands:
-  - Agent.OS -equals Linux
-  - docker
+  - Agent.OS -equals Windows
 
 variables:
-  DockerRegistryServiceConnection: 'Apprenticeships DevOps Docker Hub'
-  ImageRepository: apprenticeshipsdevops/das-logstash-exporter
-  DockerfilePath: '**/Dockerfile'
+- group: Release Management Resources
 
 stages:
 - stage: Build
   jobs:
-  - template: /pipeline-templates/job/code-build.yml
+  - template: /pipeline-templates/job/build.yml
     parameters:
-      ImageRepository: $(ImageRepository)
-      DockerFilePath: $(DockerfilePath)
-      DockerRegistryServiceConnection: $(DockerRegistryServiceConnection)
+      ServiceConnection: SFA-DIG-Prod-ARM
