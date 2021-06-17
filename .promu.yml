@@ -2,7 +2,7 @@ go:
     cgo: false
     version: 1.13.1
 repository:
-    path: github.com/chelnak/logstash_exporter
+    path: github.com/SkillsFundingAgency/das-logstash-exporter
 build:
     binaries:
         - name: logstash_exporter
