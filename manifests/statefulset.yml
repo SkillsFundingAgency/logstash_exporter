@@ -25,7 +25,7 @@ spec:
                   - key: agentpool
                     operator: In
                     values:
-                      - monitoring01
+                      - logstash01
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
             - weight: 1
