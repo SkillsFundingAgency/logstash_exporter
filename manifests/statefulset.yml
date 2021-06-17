@@ -44,14 +44,14 @@ spec:
         args:
           - >-
             exec /logstash_exporter
-              --logstash.endpoint=http://localhost:9600
-              --web.listen-address=:9198
+              --logstash.endpoint=http://localhost:9198
+              --web.listen-address=:9298
         resources:
           requests:
             memory: 256Mi
         ports:
           - name: ls-exporter
-            containerPort: 9198
+            containerPort: 9298
             protocol: TCP
         livenessProbe:
           httpGet:
@@ -83,7 +83,7 @@ spec:
   - interval: 10s
     scrapeTimeout: 10s
     honorLabels: true
-    targetPort: 9198
+    targetPort: 9298
     path: /metrics
     scheme: http
   jobLabel: das-logstash-exporter
