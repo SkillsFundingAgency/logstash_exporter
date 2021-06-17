@@ -4,7 +4,7 @@ resources:
   - repository: das-platform-building-blocks
     type: github
     name: SkillsFundingAgency/das-platform-building-blocks
-    ref: refs/tags/0.3.17
+    ref: refs/tags/0.3.18
     endpoint: SFA
 
 trigger:
@@ -21,17 +21,22 @@ trigger:
 
 pr: none
 
-pool:
-  name: "DAS - Continuous Integration"
-  demands:
-  - Agent.OS -equals Windows_NT
-
 variables:
+- name: KubectlVersion
+  value: 1.18.8
 - group: Release Management Resources
 
 stages:
-- stage: Build
-  jobs:
-  - template: /pipeline-templates/job/build.yml
+  - template: /pipeline-templates/stage/build.yml
     parameters:
       ServiceConnection: SFA-DIG-Prod-ARM
+
+  - stage: DeployTo_DEV
+    displayName: Deploy To Dev
+    variables:
+    - group: Dev Management Resources
+    jobs:
+    - template: /pipeline-templates/job/deploy.yml
+      parameters:
+        Environment: DEV
+        ServiceConnection: SFA-DAS-DevTest-ARM
