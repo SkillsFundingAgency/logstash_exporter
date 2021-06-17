@@ -11,7 +11,7 @@ import (
 	"github.com/prometheus/common/version"
 	"gopkg.in/alecthomas/kingpin.v2"
 
-	"github.com/chelnak/logstash_exporter/collector"
+	"github.com/SkillsFundingAgency/das-logstash-exporter/collector"
 )
 
 var (

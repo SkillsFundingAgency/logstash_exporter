@@ -1,4 +1,4 @@
-module github.com/chelnak/logstash_exporter
+module github.com/SkillsFundingAgency/das-logstash-exporter
 
 require (
 	github.com/prometheus/client_golang v1.1.0
