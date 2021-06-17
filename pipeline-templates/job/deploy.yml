@@ -45,5 +45,5 @@ jobs:
             AksResourceGroupName: $(AKSResourceGroupName)
             AzureServiceConnection: ${{ parameters.ServiceConnection }}
             KubectlVersion: $(KubectlVersion)
-            ManifestFile: $(Pipeline.Workspace)/das-logstash-exporter/manifests/deployment.yml
+            ManifestFile: $(Pipeline.Workspace)/das-logstash-exporter/manifests/statefulset.yml
             Namespace: $(KubernetesNamespace)
