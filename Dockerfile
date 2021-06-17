@@ -4,7 +4,7 @@ FROM golang:1.13.1 as golang
 ADD . $GOPATH/das-logstash-exporter/
 
 # Get dependencies and build!
-RUN cd $GOPATH/logstash_exporter && make
+RUN cd $GOPATH/das-logstash-exporter && make
 
 # It looks like the `latest` tag uses uclibc
 # See: https://hub.docker.com/_/busybox/
