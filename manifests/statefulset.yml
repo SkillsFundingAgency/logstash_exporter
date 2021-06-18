@@ -15,6 +15,9 @@ spec:
     metadata:
       labels:
         app: das-logstash-exporter
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '9198'
     spec:
       terminationGracePeriodSeconds: 300
       affinity:
@@ -43,9 +46,7 @@ spec:
         command: ["/bin/sh", "-c"]
         args:
           - >-
-            exec /logstash_exporter
-              --logstash.endpoint=http://logstash-dta-logstash-dta-headless:9500
-              --web.listen-address=:9198
+            exec /logstash_exporter --logstash.endpoint=http://logstash-dta-logstash-dta-headless:9600 --web.listen-address=:9198
         resources:
           requests:
             memory: 256Mi
@@ -94,3 +95,18 @@ spec:
   namespaceSelector:
     matchNames:
       - monitoring
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: das-logstash-exporter
+  labels:
+    app: das-logstash-exporter
+spec:
+  ports:
+  - name: metrics
+    port: 9198
+    protocol: TCP
+  selector:
+    app: das-logstash-exporter
