@@ -44,7 +44,7 @@ spec:
         args:
           - >-
             exec /logstash_exporter
-              --logstash.endpoint=http://localhost:9500
+              --logstash.endpoint=http://logstash-dta-logstash-dta-headless:9500
               --web.listen-address=:9198
         resources:
           requests:
