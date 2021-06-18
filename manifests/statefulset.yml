@@ -39,7 +39,7 @@ spec:
                 topologyKey: failure-domain.beta.kubernetes.io/zone
       containers:
       - name: das-logstash-exporter
-        image: __PublicAcrName__.azurecr.io/das-logstash-exporter:0.1.20-DASD-8842-Logstash-Exporter-Setup.9
+        image: __PublicAcrName__.azurecr.io/das-logstash-exporter:0.1.20-DASD-8842-Logstash-Exporter-Setup.17
         command: ["/bin/sh", "-c"]
         args:
           - >-
