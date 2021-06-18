@@ -83,8 +83,7 @@ spec:
   endpoints:
   - interval: 10s
     scrapeTimeout: 10s
-    honorLabels: true
-    targetPort: 9198
+    port: ls-exporter
     path: /metrics
     scheme: http
   jobLabel: das-logstash-exporter
@@ -105,7 +104,7 @@ metadata:
     app: das-logstash-exporter
 spec:
   ports:
-  - name: metrics
+  - name: ls-exporter
     port: 9198
     protocol: TCP
   selector:
