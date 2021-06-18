@@ -1,3 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: das-logstash-exporter
+  labels:
+    app: das-logstash-exporter
+spec:
+  ports:
+  - name: ls-exporter
+    port: 9198
+    protocol: TCP
+  selector:
+    app: das-logstash-exporter
+
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -51,9 +65,7 @@ spec:
           requests:
             memory: 256Mi
         ports:
-          - name: ls-exporter
-            containerPort: 9198
-            protocol: TCP
+        - containerPort: 9198
         livenessProbe:
           httpGet:
             path: /metrics
@@ -70,8 +82,8 @@ spec:
           timeoutSeconds: 60
           failureThreshold: 8
           successThreshold: 1
----
 
+---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
@@ -93,19 +105,3 @@ spec:
   namespaceSelector:
     matchNames:
       - monitoring
-
----
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: das-logstash-exporter
-  labels:
-    app: das-logstash-exporter
-spec:
-  ports:
-  - name: ls-exporter
-    port: 9198
-    protocol: TCP
-  selector:
-    app: das-logstash-exporter
