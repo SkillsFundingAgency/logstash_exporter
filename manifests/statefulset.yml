@@ -90,7 +90,7 @@ metadata:
   name: das-logstash-exporter
   namespace: monitoring
   labels:
-    app: das-logstash-exporter
+    app: prometheus
 spec:
   endpoints:
   - interval: 10s
