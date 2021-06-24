@@ -5,7 +5,7 @@ stages:
 - stage: Build
   displayName: Build Image
   pool:
-    name: 'DAS - Continuous Integration'
+    name: DAS - Continuous Integration
     demands: Agent.OS -equals Windows_NT
   jobs:
   - job: Build_Image
