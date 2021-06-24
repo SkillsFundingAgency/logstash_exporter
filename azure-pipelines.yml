@@ -1,3 +1,12 @@
+resources:
+  repositories:
+  - repository: self
+  - repository: das-platform-building-blocks
+    type: github
+    name: SkillsFundingAgency/das-platform-building-blocks
+    ref: refs/tags/0.3.18
+    endpoint: SFA
+
 trigger:
   batch: true
   branches:
@@ -12,22 +21,10 @@ trigger:
 
 pr: none
 
-pool:
-  name: "DAS - Continuous Integration"
-  demands:
-  - Agent.OS -equals Linux
-  - docker
-
 variables:
-  DockerRegistryServiceConnection: 'Apprenticeships DevOps Docker Hub'
-  ImageRepository: apprenticeshipsdevops/das-logstash-exporter
-  DockerfilePath: '**/Dockerfile'
+- group: Release Management Resources
 
 stages:
-- stage: Build
-  jobs:
-  - template: /pipeline-templates/job/code-build.yml
+  - template: /pipeline-templates/stage/build.yml
     parameters:
-      ImageRepository: $(ImageRepository)
-      DockerFilePath: $(DockerfilePath)
-      DockerRegistryServiceConnection: $(DockerRegistryServiceConnection)
+      ServiceConnection: SFA-DIG-Prod-ARM

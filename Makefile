@@ -4,7 +4,7 @@ PROMU_VERSION  := 0.5.0
 
 include Makefile.common
 
-TARGET ?= logstash_exporter
+TARGET ?= das-logstash-exporter
 
 vendor:
 	@echo ">> installing dependencies on vendor"
