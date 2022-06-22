@@ -328,12 +328,6 @@ var queueJSON = []byte(`
       "events_count" : 132,      
       "queue_size_in_bytes": 123456,
       "max_queue_size_in_bytes" : 8589934592,
-      "capacity" : {
-        "queue_size_in_bytes": 123456,
-        "page_capacity_in_bytes" : 262144000,
-        "max_queue_size_in_bytes" : 8589934592,
-        "max_unread_events" : 12
-      },
       "data" : {
         "path" : "/path/to/data/queue",
         "free_space_in_bytes" : 89280552960,
@@ -457,7 +451,7 @@ func TestPipelineQueueStats(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, 132, response.Pipeline.Queue.Events)
 	assert.Equal(t, 123456, response.Pipeline.Queue.QueueSizeInBytes)
-	assert.Equal(t, int64(14567898), response.Pipeline.Queue.MaxQueueSizeInBytes)
+	assert.Equal(t, int64(8589934592), response.Pipeline.Queue.MaxQueueSizeInBytes)
 }
 
 func TestPipelineDLQueueStats(t *testing.T) {
