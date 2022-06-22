@@ -82,6 +82,7 @@ ifeq ($(GOHOSTOS),$(filter $(GOHOSTOS),linux darwin))
 		GOLANGCI_LINT := $(FIRST_GOPATH)/bin/golangci-lint
 	endif
 endif
+STATICCHECK_VERSION ?= 2019.2.3
 
 PREFIX                  ?= $(shell pwd)
 BIN_DIR                 ?= $(shell pwd)
@@ -173,6 +174,9 @@ ifdef GO111MODULE
 else
 	$(GOLANGCI_LINT) run $(pkgs)
 endif
+	GO111MODULE=$(GO111MODULE) $(STATICCHECK) $(pkgs)
+else
+	$(STATICCHECK) $(pkgs)
 endif
 
 # For backward-compatibility.
@@ -254,6 +258,8 @@ $(GOLANGCI_LINT):
 		| sed -e '/install -d/d' \
 		| sh -s -- -b $(FIRST_GOPATH)/bin $(GOLANGCI_LINT_VERSION)
 endif
+$(STATICCHECK):
+	go get honnef.co/go/tools/cmd/staticcheck@$(STATICCHECK_VERSION)
 
 ifdef GOVENDOR
 .PHONY: $(GOVENDOR)

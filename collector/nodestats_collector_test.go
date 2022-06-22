@@ -324,8 +324,8 @@ var queueJSON = []byte(`
       "failures" : 0
     },
     "queue" : {
-      "events" : 0,
       "type" : "persisted",
+      "events_count" : 132,      
       "queue_size_in_bytes": 123456,
       "max_queue_size_in_bytes" : 8589934592,
       "capacity" : {
@@ -430,7 +430,6 @@ func TestPipelineNoQueueStats(t *testing.T) {
 	err := getMetrics(m, &response)
 
 	assert.Nil(t, err)
-	// assert.NotEqual(t, 12, response.Pipeline.Queue.Capacity.MaxUnreadEvents)
 	assert.Nil(t, response.Pipeline.Plugins.Outputs[0].Documents)
 	assert.Nil(t, response.Pipeline.Plugins.Outputs[0].BulkRequests)
 }
@@ -456,7 +455,9 @@ func TestPipelineQueueStats(t *testing.T) {
 	err := getMetrics(m, &response)
 
 	assert.Nil(t, err)
-	// assert.Equal(t, 12, response.Pipeline.Queue.Capacity.MaxUnreadEvents)
+	assert.Equal(t, 132, response.Pipeline.Queue.Events)
+	assert.Equal(t, 123456, response.Pipeline.Queue.QueueSizeInBytes)
+	assert.Equal(t, int64(14567898), response.Pipeline.Queue.MaxQueueSizeInBytes)
 }
 
 func TestPipelineDLQueueStats(t *testing.T) {
