@@ -21,8 +21,9 @@ stages:
       - pwsh: |
           cd integration-tests
           docker-compose up --detach
-          Start-Sleep -Seconds 20 # do better
+          Start-Sleep -Seconds 30 # do better
           $MetricsResponse = Invoke-RestMethod "http://localhost:9198/metrics"
+          Write-Host $MetricsResponse
           $RequiredMetrics = $MetricsResponse -like "*logstash_node_queue_size_bytes*"
           if(!$RequiredMetrics){
             throw "Required logstash metrics not available"

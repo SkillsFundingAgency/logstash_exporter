@@ -18,7 +18,11 @@ services:
       timeout: 50s
       retries: 5
   exporter:
-    build: ..
+    build: 
+      context: ..
+      cache_from:
+        - golang:1.13.1
+        - das-logstash-exporter
     ports:
       - "9198:9198"
     command: ["--web.listen-address=:9198", "--logstash.endpoint=http://logstash:9600"]
