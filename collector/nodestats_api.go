@@ -17,7 +17,9 @@ type Pipeline struct {
 				In                        int `json:"in"`
 				Out                       int `json:"out"`
 			} `json:"events"`
-			Name string `json:"name"`
+			Name               string `json:"name"`
+			PeakConnections    *int   `json:"peak_connections,omitempty"`
+			CurrentConnections *int   `json:"current_connections,omitempty"`
 		} `json:"inputs,omitempty"`
 		Filters []struct {
 			ID     string `json:"id"`
@@ -65,7 +67,7 @@ type Pipeline struct {
 		Type                string `json:"type"`
 		QueueSizeInBytes    int    `json:"queue_size_in_bytes"`
 		MaxQueueSizeInBytes int64  `json:"max_queue_size_in_bytes"`
-		Data struct {
+		Data                struct {
 			Path             string `json:"path"`
 			FreeSpaceInBytes int64  `json:"free_space_in_bytes"`
 			StorageType      string `json:"storage_type"`

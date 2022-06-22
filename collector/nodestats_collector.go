@@ -50,12 +50,12 @@ type NodeStatsCollector struct {
 	PipelinePluginBulkRequestsFailures    *prometheus.Desc
 	PipelinePluginMatches                 *prometheus.Desc
 	PipelinePluginFailures                *prometheus.Desc
+	PipelinePluginCurrentConnections      *prometheus.Desc
+	PipelinePluginPeakConnections         *prometheus.Desc
 
-	PipelineQueueEvents          *prometheus.Desc
-	PipelineQueuePageCapacity    *prometheus.Desc
-	PipelineQueueMaxQueueSize    *prometheus.Desc
-	PipelineQueueMaxUnreadEvents *prometheus.Desc
-	PipelineQueueSizeInBytes     *prometheus.Desc
+	PipelineQueueEvents       *prometheus.Desc
+	PipelineQueueMaxQueueSize *prometheus.Desc
+	PipelineQueueSizeInBytes  *prometheus.Desc
 
 	PipelineDeadLetterQueueSizeInBytes *prometheus.Desc
 }
@@ -312,6 +312,20 @@ func NewNodeStatsCollector(logstashEndpoint string) (Collector, error) {
 			nil,
 		),
 
+		PipelinePluginCurrentConnections: prometheus.NewDesc(
+			prometheus.BuildFQName(Namespace, subsystem, "plugin_current_connections_count"),
+			"plugin_current_connections",
+			[]string{"pipeline", "plugin", "plugin_id", "plugin_type"},
+			nil,
+		),
+
+		PipelinePluginPeakConnections: prometheus.NewDesc(
+			prometheus.BuildFQName(Namespace, subsystem, "plugin_peak_connections_count"),
+			"plugin_peak_connections",
+			[]string{"pipeline", "plugin", "plugin_id", "plugin_type"},
+			nil,
+		),
+
 		PipelineQueueEvents: prometheus.NewDesc(
 			prometheus.BuildFQName(Namespace, subsystem, "queue_events"),
 			"queue_events",
@@ -319,23 +333,9 @@ func NewNodeStatsCollector(logstashEndpoint string) (Collector, error) {
 			nil,
 		),
 
-		PipelineQueuePageCapacity: prometheus.NewDesc(
-			prometheus.BuildFQName(Namespace, subsystem, "queue_page_capacity_bytes"),
-			"queue_page_capacity_bytes",
-			[]string{"pipeline"},
-			nil,
-		),
-
 		PipelineQueueMaxQueueSize: prometheus.NewDesc(
 			prometheus.BuildFQName(Namespace, subsystem, "queue_max_size_bytes"),
 			"queue_max_size_bytes",
-			[]string{"pipeline"},
-			nil,
-		),
-
-		PipelineQueueMaxUnreadEvents: prometheus.NewDesc(
-			prometheus.BuildFQName(Namespace, subsystem, "queue_max_unread_events"),
-			"queue_max_unread_events",
 			[]string{"pipeline"},
 			nil,
 		),
@@ -589,7 +589,7 @@ func (c *NodeStatsCollector) collectProcess(stats NodeStatsResponse, ch chan<- p
 	ch <- prometheus.MustNewConstMetric(
 		c.ProcessCPUTotalInMillis,
 		prometheus.CounterValue,
-		float64(stats.Process.CPU.TotalInMillis/1000),
+		float64(stats.Process.CPU.TotalInMillis)/1000,
 	)
 }
 
@@ -598,14 +598,14 @@ func (c *NodeStatsCollector) collectPipelines(pipelines map[string]Pipeline, ch 
 		ch <- prometheus.MustNewConstMetric(
 			c.PipelineDuration,
 			prometheus.CounterValue,
-			float64(pipeline.Events.DurationInMillis/1000),
+			float64(pipeline.Events.DurationInMillis)/1000,
 			pipelineID,
 		)
 
 		ch <- prometheus.MustNewConstMetric(
 			c.PipelineQueuePushDuration,
 			prometheus.CounterValue,
-			float64(pipeline.Events.QueuePushDurationInMillis/1000),
+			float64(pipeline.Events.QueuePushDurationInMillis)/1000,
 			pipelineID,
 		)
 
@@ -652,19 +652,41 @@ func (c *NodeStatsCollector) collectPipelines(pipelines map[string]Pipeline, ch 
 			ch <- prometheus.MustNewConstMetric(
 				c.PipelinePluginEventsQueuePushDuration,
 				prometheus.CounterValue,
-				float64(plugin.Events.QueuePushDurationInMillis/1000),
+				float64(plugin.Events.QueuePushDurationInMillis)/1000,
 				pipelineID,
 				plugin.Name,
 				plugin.ID,
 				"input",
 			)
+			if plugin.CurrentConnections != nil {
+				ch <- prometheus.MustNewConstMetric(
+					c.PipelinePluginCurrentConnections,
+					prometheus.GaugeValue,
+					float64(*plugin.CurrentConnections),
+					pipelineID,
+					plugin.Name,
+					plugin.ID,
+					"input",
+				)
+			}
+			if plugin.PeakConnections != nil {
+				ch <- prometheus.MustNewConstMetric(
+					c.PipelinePluginPeakConnections,
+					prometheus.GaugeValue,
+					float64(*plugin.PeakConnections),
+					pipelineID,
+					plugin.Name,
+					plugin.ID,
+					"input",
+				)
+			}
 		}
 
 		for _, plugin := range pipeline.Plugins.Filters {
 			ch <- prometheus.MustNewConstMetric(
 				c.PipelinePluginEventsDuration,
 				prometheus.CounterValue,
-				float64(plugin.Events.DurationInMillis/1000),
+				float64(plugin.Events.DurationInMillis)/1000,
 				pipelineID,
 				plugin.Name,
 				plugin.ID,
@@ -730,7 +752,7 @@ func (c *NodeStatsCollector) collectPipelines(pipelines map[string]Pipeline, ch 
 			ch <- prometheus.MustNewConstMetric(
 				c.PipelinePluginEventsDuration,
 				prometheus.CounterValue,
-				float64(plugin.Events.DurationInMillis/1000),
+				float64(plugin.Events.DurationInMillis)/1000,
 				pipelineID,
 				plugin.Name,
 				plugin.ID,
@@ -801,6 +823,12 @@ func (c *NodeStatsCollector) collectPipelines(pipelines map[string]Pipeline, ch 
 			// 	float64(pipeline.Queue.Capacity.PageCapacityInBytes),
 			// 	pipelineID,
 			// )
+			ch <- prometheus.MustNewConstMetric(
+				c.PipelineQueueSizeInBytes,
+				prometheus.CounterValue,
+				float64(pipeline.Queue.QueueSizeInBytes),
+				pipelineID,
+			)
 
 			ch <- prometheus.MustNewConstMetric(
 				c.PipelineQueueMaxQueueSize,

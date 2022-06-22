@@ -5,6 +5,8 @@ PROMU_VERSION  := 0.5.0
 include Makefile.common
 
 TARGET ?= das-logstash-exporter
+GOLINT         := $(FIRST_GOPATH)/bin/golangci-lint
+GOLINT_VERSION := v1.18.0
 
 vendor:
 	@echo ">> installing dependencies on vendor"
