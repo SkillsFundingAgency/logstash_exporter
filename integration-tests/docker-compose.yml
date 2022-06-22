@@ -1,0 +1,24 @@
+version: '3.9'
+services:
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.16.2
+    container_name: logstash
+    user: root
+    environment:
+      - XPACK_MONITORING_ENABLED=false
+      - QUEUE_TYPE=persisted
+    ports:
+      - "9600:9600"
+    volumes:
+    - ./pipeline:/usr/share/logstash/pipeline/
+    - ./test.log:/tmp/test.log
+    healthcheck:
+      test: bin/logstash -t
+      interval: 60s
+      timeout: 50s
+      retries: 5
+  exporter:
+    build: ..
+    ports:
+      - "9198:9198"
+    command: ["--web.listen-address=:9198", "--logstash.endpoint=http://logstash:9600"]
