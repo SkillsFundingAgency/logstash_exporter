@@ -17,6 +17,7 @@ stages:
           ContainerRegistryName: $(PublicAcrName)
           ServiceConnection: ${{ parameters.ServiceConnection }}
           ImageName: das-logstash-exporter
+          BranchToCreateLatestTag: master
 
       - pwsh: |
           cd integration-tests
